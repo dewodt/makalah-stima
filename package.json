@@ -1,0 +1,22 @@
+{
+  "name": "makalah-stima",
+  "version": "1.0.0",
+  "description": "Tugas Makalah Strategi Algoritma ITB 2024",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dewodt/makalah-stima.git"
+  },
+  "author": "Dewantoro Triatmojo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dewodt/makalah-stima/issues"
+  },
+  "homepage": "https://github.com/dewodt/makalah-stima#readme",
+  "dependencies": {
+    "tsx": "^4.11.0"
+  }
+}
