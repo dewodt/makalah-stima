@@ -18,5 +18,8 @@
   "homepage": "https://github.com/dewodt/makalah-stima#readme",
   "dependencies": {
     "tsx": "^4.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12"
   }
 }
