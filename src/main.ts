@@ -80,7 +80,10 @@ const printHighlitedText = (text: string, solutions: Solution[]): void => {
 const main = () => {
   // Read test folder
   const testFolder = "./test";
-  const files = readdirSync(testFolder);
+  const files = readdirSync(testFolder).sort(
+    (f1, f2) => parseInt(f1.split(".")[0]) - parseInt(f2.split(".")[0])
+  );
+  console.log(files);
 
   // For each file in the test folder, read the content and search for the first spam word
   console.log("============================================");
