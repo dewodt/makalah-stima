@@ -1,11 +1,38 @@
-export const Regex = (text: string) => {
-  // Khusus untuk pencairan yang lebih kompleks sehingga tidak bisa menggunakan string matching algorithm
-  const regex =
-    new Regex(`(?i)(\bFREE\b|\bWIN\b|\bCLICK\b|\bHERE\b|\bLIMITED\b|\bOFFER\b|\bBUY\b|\bNOW\b|\bMONEY\b|\bCASH\b|\bDISCOUNT\b|\bSALE\b)|
-((http|https):\/\/)?(www\.)?([a-zA-Z0-9]+)(\.([a-zA-Z]{2,}))+|
-\b([A-Z]{3,})\b|
-(.)\1{2,}
-`);
+import { type Solution } from "./types";
+import { spamWordsList } from "./spam-words-list";
 
-    return 
+export const regexMatch = (text: string): Solution[] => {
+  // Convert the spam words list to a regex pattern
+  const spamPattern = new RegExp(
+    spamWordsList.map((word) => `\\b${word}\\b`).join("|"),
+    "gi"
+  );
+
+  // Regex spam
+  const spamPatterns = [
+    spamPattern, // Keywords
+    /(?:http:\/\/|https:\/\/|www\.)\S+/gi, // URLs
+    /(.)\1{3,}/gi, // Repeated characters
+  ];
+
+  // Initialize the result
+  const result: Solution[] = [];
+
+  // Iterate through the spam patterns
+  for (const spamPattern of spamPatterns) {
+    // Find all the matches
+    const matches = text.matchAll(spamPattern);
+
+    // Iterate through the matches
+    for (const match of matches) {
+      // Add the match to the result
+      result.push({
+        start: match.index,
+        end: match.index + match[0].length - 1,
+      });
+    }
+  }
+
+  // Return the result
+  return result;
 };

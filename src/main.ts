@@ -5,11 +5,8 @@ import { spamWordsList } from "./spam-words-list";
 import { readFileSync } from "fs";
 import chalk from "chalk";
 import { readdirSync } from "fs";
-
-type Solution = {
-  start: number;
-  end: number;
-};
+import type { Solution } from "./types";
+import { regexMatch } from "./regex";
 
 const getNoSubsetSolution = (initialSolution: Solution[]): Solution[] => {
   // No solution
@@ -83,7 +80,35 @@ const main = () => {
   const files = readdirSync(testFolder).sort(
     (f1, f2) => parseInt(f1.split(".")[0]) - parseInt(f2.split(".")[0])
   );
-  console.log(files);
+
+  // Regex
+  console.log("============================================");
+  console.log("Regex");
+  console.time("Regex Total Duration");
+  files.forEach((file) => {
+    console.log("File:", file);
+    console.time("Duration");
+
+    // Read the content of the file
+    const text = readFileSync(`${testFolder}/${file}`, "utf8");
+
+    // Search for spam words using Regex
+    const solutions = regexMatch(text);
+
+    // Stop the timer
+    console.timeEnd("Duration");
+
+    // Print
+    printHighlitedText(text, solutions);
+
+    // If no spam words are found
+    if (!solutions.length) {
+      console.log(chalk.red("No spam words found"));
+    }
+    console.log();
+  });
+  console.timeEnd("Regex Total Duration");
+  console.log("============================================");
 
   // For each file in the test folder, read the content and search for the first spam word
   console.log("============================================");
@@ -94,12 +119,12 @@ const main = () => {
     console.time("Duration");
 
     // Read the content of the file
-    const text = readFileSync(`${testFolder}/${file}`, "utf8");
+    const text = readFileSync(`${testFolder}/${file}`, "utf8").toLowerCase();
 
     // Search for spam words using Brute Force
     const solutions: Solution[] = [];
     for (const word of spamWordsList) {
-      const res = Bf(text, word);
+      const res = Bf(text.toLowerCase(), word.toLowerCase()); // Case insensitive
       if (res !== -1) {
         solutions.push({ start: res, end: res + word.length - 1 });
       }
@@ -133,7 +158,7 @@ const main = () => {
     // Search for spam words using Knuth-Morris-Pratt
     const solutions: Solution[] = [];
     for (const word of spamWordsList) {
-      const res = Kmp(text, word);
+      const res = Kmp(text.toLowerCase(), word.toLowerCase()); // Case insensitive
       if (res !== -1) {
         solutions.push({ start: res, end: res + word.length - 1 });
       }
@@ -168,7 +193,7 @@ const main = () => {
     // Search for spam words using Boyer-Moore
     const solutions: Solution[] = [];
     for (const word of spamWordsList) {
-      const res = Bm(text, word);
+      const res = Bm(text.toLowerCase(), word.toLowerCase()); // Case insensitive
       if (res !== -1) {
         solutions.push({ start: res, end: res + word.length - 1 });
       }
