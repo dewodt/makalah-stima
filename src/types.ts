@@ -1,4 +1,4 @@
 export type Solution = {
-  start: number;
-  end: number;
+  start: number; // Start of the solution
+  end: number; // End of the solution (inclusive)
 };
